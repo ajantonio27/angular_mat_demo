@@ -1,0 +1,247 @@
+<div class="page-wrapper">
+  <div class="form-container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="form-header">
+      <div class="header-top">
+        <div class="header-icon-wrap">
+          <mat-icon>app_registration</mat-icon>
+        </div>
+        <div class="header-text">
+          <h1>Create your account</h1>
+          <p>Join us today — it only takes a minute</p>
+        </div>
+      </div>
+      <div class="header-steps">
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+    </div>
+
+    <!-- ===== FORM BODY ===== -->
+    <div class="form-body">
+      <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)">
+
+        <!-- SECTION 1: Account Info -->
+        <div class="section">
+          <div class="section-label">Account Information</div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">person</mat-icon>
+            <input matInput placeholder="e.g. johndoe" formControlName="userName">
+            @if (formdata.get('userName')?.hasError('required') && formdata.get('userName')?.touched) {
+              <mat-error>Username is required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email address</mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">alternate_email</mat-icon>
+            <input matInput placeholder="you@example.com" formControlName="email" type="email">
+            @if (formdata.get('email')?.hasError('required') && formdata.get('email')?.touched) {
+              <mat-error>Email is required.</mat-error>
+            }
+            @if (formdata.get('email')?.hasError('email') && formdata.get('email')?.touched) {
+              <mat-error>Please enter a valid email address.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">lock</mat-icon>
+            <input matInput [type]="hidePassword ? 'password' : 'text'"
+                   placeholder="Min. 8 characters" formControlName="password">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="hidePassword = !hidePassword">
+              <mat-icon style="font-size:18px;">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (formdata.get('password')?.hasError('required') && formdata.get('password')?.touched) {
+              <mat-error>Password is required.</mat-error>
+            }
+            @if (formdata.get('password')?.hasError('minlength') && formdata.get('password')?.touched) {
+              <mat-error>Password must be at least 8 characters.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- SECTION 2: Personal Info -->
+        <div class="section">
+          <div class="section-label">Personal Information</div>
+
+          <span class="field-label">Gender</span>
+          <mat-radio-group formControlName="gender" class="radio-group">
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+            <mat-radio-button value="other">Other</mat-radio-button>
+            <mat-radio-button value="prefer_not">Prefer not to say</mat-radio-button>
+          </mat-radio-group>
+          @if (formdata.get('gender')?.invalid && submitted) {
+            <span class="custom-error">Please select a gender.</span>
+          }
+
+          <br><br>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Birth Date</mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">cake</mat-icon>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate"
+                   placeholder="MM/DD/YYYY" readonly>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (formdata.get('birthDate')?.hasError('required') && submitted) {
+              <mat-error>Birth date is required.</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- COUNTRY — MatSelect (Extra #1) -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Country</mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">public</mat-icon>
+            <mat-select formControlName="country">
+              @for (c of countries; track c) {
+                <mat-option [value]="c">{{ c }}</mat-option>
+              }
+            </mat-select>
+            @if (formdata.get('country')?.hasError('required') && submitted) {
+              <mat-error>Please select a country.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address <span style="color:#4a5568; font-size:12px;">(optional)</span></mat-label>
+            <mat-icon matPrefix style="margin-right:8px; color:#4a5568; font-size:18px;">home</mat-icon>
+            <textarea matInput placeholder="Enter your address"
+                      formControlName="address" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- SECTION 3: Preferences -->
+        <div class="section">
+          <div class="section-label">Preferences</div>
+
+          <!-- INTERESTS — MatChips (Extra #2) -->
+          <span class="field-label">Interests <span style="color:#4a5568; font-size:12px; font-weight:400;">(optional)</span></span>
+          <mat-chip-set class="chip-set" style="margin-bottom: 20px; display: block;">
+            @for (interest of interests; track interest) {
+              <mat-chip
+                [class.chip-selected]="isSelected(interest)"
+                (click)="toggleInterest(interest)">
+                @if (isSelected(interest)) {
+                  <mat-icon style="font-size:14px; width:14px; height:14px; margin-right:4px;">check</mat-icon>
+                }
+                {{ interest }}
+              </mat-chip>
+            }
+          </mat-chip-set>
+
+          <!-- SLIDER -->
+          <div class="slider-wrap">
+            <div class="slider-header">
+              <span class="slider-title">Angular Skill Level</span>
+              <span class="skill-badge">{{ formdata.get('angularSkillLevel')?.value }}</span>
+            </div>
+            <mat-slider [min]="minSkillLevel" [max]="maxSkillLevel" step="1" color="primary" style="width:100%;">
+              <input matSliderThumb formControlName="angularSkillLevel">
+            </mat-slider>
+            <div class="slider-range">
+              <span>Beginner</span>
+              <span>Expert</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: Terms -->
+        <div class="section">
+          <div class="section-label">Agreement</div>
+
+          <!-- CHECKBOX (Extra #3) -->
+          <div class="checkbox-wrap">
+            <mat-checkbox formControlName="agreeToTerms" color="primary">
+              I agree to the <a href="#" class="terms-link">Terms of Service</a>
+              and <a href="#" class="terms-link">Privacy Policy</a>
+            </mat-checkbox>
+          </div>
+          @if (formdata.get('agreeToTerms')?.invalid && submitted) {
+            <span class="custom-error">You must agree to the terms to continue.</span>
+          }
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="button-row">
+          <button mat-flat-button type="submit" class="submit-btn">
+            <mat-icon style="margin-right:6px; font-size:18px;">how_to_reg</mat-icon>
+            Create Account
+          </button>
+          <button mat-button type="button" class="reset-btn"
+                  (click)="formdata.reset(); submitted = false;">
+            Reset
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ===== RESULT CARD ===== -->
+    @if (submitted && formdata.valid) {
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-success-icon">
+            <mat-icon>check</mat-icon>
+          </div>
+          <div>
+            <h2>Registration Successful!</h2>
+            <p>Your account details have been saved below</p>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <div class="result-item">
+            <span class="result-label">Username</span>
+            <span class="result-value">{{ userName }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Email</span>
+            <span class="result-value">{{ email }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Gender</span>
+            <span class="result-value">{{ gender }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Birth Date</span>
+            <span class="result-value">{{ birthDate | date:'mediumDate' }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Country</span>
+            <span class="result-value">{{ country }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Address</span>
+            <span class="result-value">{{ address || '—' }}</span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">Skill Level</span>
+            <span class="result-value">{{ angularSkillLevel }} / 10</span>
+          </div>
+          @if (selectedInterests.length > 0) {
+            <div class="result-item">
+              <span class="result-label">Interests</span>
+              <span class="result-value">{{ selectedInterests.join(', ') }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ===== ERROR CARD ===== -->
+    @if (submitted && formdata.invalid) {
+      <div class="error-card">
+        <mat-icon>error_outline</mat-icon>
+        <p>Please fill in all required fields correctly before submitting.</p>
+      </div>
+    }
+
+  </div>
+</div>

@@ -1,59 +1,82 @@
-# AngularRegistrationForm
+# Angular Material Registration Form
+### Finals Lab Activity 4 — Angular Material Hands-on Demo
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+A complete user registration form built with Angular Material components, Reactive Forms, and form validation.
 
-## Development server
+---
 
-To start a local development server, run:
+## ✅ Angular Material Components Used
 
+### Base Components (from demo):
+| Component | Module | Used For |
+|-----------|--------|----------|
+| `mat-form-field` | `MatFormFieldModule` | Field wrappers |
+| `matInput` | `MatInputModule` | Text inputs |
+| `mat-radio-group/button` | `MatRadioModule` | Gender selection |
+| `mat-datepicker` | `MatDatepickerModule` | Birth date |
+| `mat-slider` | `MatSliderModule` | Skill level |
+| `mat-raised-button` | `MatButtonModule` | Submit button |
+
+### Extra Components Added (+3 required):
+| Component | Module | Used For |
+|-----------|--------|----------|
+| `mat-select` | `MatSelectModule` | Country dropdown (#1) |
+| `mat-chip` | `MatChipsModule` | Interests selection (#2) |
+| `mat-checkbox` | `MatCheckboxModule` | Agree to terms (#3) |
+| `mat-icon` | `MatIconModule` | Icons throughout form (bonus) |
+| `matTooltip` | `MatTooltipModule` | Hover hints (bonus) |
+| `mat-divider` | `MatDividerModule` | Visual separators (bonus) |
+
+---
+
+## 🚀 Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/YOUR_USERNAME/angular_mat_demo.git
+cd angular_mat_demo
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Run the App
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open your browser at `http://localhost:4200`
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+## 📁 Project Structure
+```
+src/
+└── app/
+    ├── register/
+    │   ├── register.component.ts   ← Logic, FormGroup, Validators
+    │   ├── register.component.html ← Material form template
+    │   └── register.component.css  ← Styling
+    ├── app.component.ts
+    ├── app.component.html
+    └── app.config.ts
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 📋 Form Fields & Validation
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Field | Type | Validation |
+|-------|------|------------|
+| Username | Text input | Required |
+| Email | Text input | Required, valid email format |
+| Password | Password input | Required, min 8 characters |
+| Gender | Radio buttons | Required |
+| Birth Date | Date picker | Required |
+| Country | Dropdown (Select) | Required |
+| Address | Textarea | Optional |
+| Interests | Chips | Optional (multi-select) |
+| Angular Skill Level | Slider | Default: 5 (range 1–10) |
+| Agree to Terms | Checkbox | Required (must be checked) |
